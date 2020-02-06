@@ -1,0 +1,21 @@
+version: '3.7'
+
+services:
+  nats:
+    image: nats:latest
+    ports:
+    - "4222:4222"
+    - "8222:8222"
+    - "6222:6222"
+
+  app:
+    build:
+      context: .
+    environment:
+      NATS_SERVER_ADDR: nats
+    ports:
+    - "8000:8000"
+    depends_on:
+      - nats
+
+
