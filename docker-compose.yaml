@@ -8,11 +8,17 @@ services:
     - "8222:8222"
     - "6222:6222"
 
+  nats2:
+    image: nats:latest
+    ports:
+    - "4223:4222"
+
   app:
     build:
       context: .
     environment:
       NATS_SERVER_ADDR: nats
+      NATS_SERVER_ADDR_2: "nats2:4223"
     ports:
     - "8000:8000"
     depends_on:
