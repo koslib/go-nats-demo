@@ -4,7 +4,7 @@ import (
 	"github.com/nats-io/nats.go"
 	"log"
 	"os"
-	"sync"
+	"time"
 )
 
 var nc *nats.Conn
@@ -13,7 +13,7 @@ func main() {
 	natsServerAddr := getEnv("NATS_SERVER_ADDR", "127.0.0.1")
 
 	var err error
-	nc, err = nats.Connect(natsServerAddr)
+	nc, err = nats.Connect(natsServerAddr, nats.Timeout(15*time.Second))
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -21,18 +21,42 @@ func main() {
 
 	defer nc.Close()
 
+	// async model example
 	if _, err = nc.QueueSubscribe("updates", "updates", MessagesConsumer); err != nil {
 		log.Fatal("could not subscribe to queue")
 	}
-	MessagesProducer(nc)
 
-	wg := sync.WaitGroup{}
-	wg.Add(1)
-	wg.Wait()
+	QueueMessageProducer(nc)
+
+	// sync model example
+	sub, err := nc.SubscribeSync("sync_updates")
+	if err != nil {
+		log.Fatal(err)
+	}
+	if err = sub.SetPendingLimits(20000, 50*1024*1024); err != nil {
+		log.Fatalf("unable to set nats limits with error: %s", err)
+	}
+
+	// create a channel so that it only blocks exiting - an alternative to an endless loop
+	channel := make(chan struct{})
+
+	RequestReplyMessageProducer(nc)
+
+	// run this in a goroutine so that we don't block the main thread, and keep the consumer running
+	go SyncMessageConsumer(sub)
+
+	log.Print("sleeping and then trying the second batch")
+	// simulate a pause in sync messages, and then fire back again
+	time.Sleep(5 * time.Second)
+
+	RequestReplyMessageProducer(nc)
+
+	// block until the consumer is done
+	<-channel
 
 }
 
-func getEnv(name, defaultValue string) string{
+func getEnv(name, defaultValue string) string {
 	envValue := os.Getenv(name)
 	if envValue == "" {
 		return defaultValue
