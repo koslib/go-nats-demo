@@ -39,6 +39,9 @@ docker-compose down
 * Async messages can define their binding functions
 * Timeouts are configurable in pretty much anything
 * Simple and clean Go APIs
+* Wildcards support in topics/subjects
+* Messages can be acked manually
+* Message requeue 
 
 ## Disclaimer
 
