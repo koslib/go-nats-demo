@@ -18,10 +18,10 @@ func SyncMessageConsumer(sub *nats.Subscription) {
 	for {
 		msg, err := sub.NextMsg(1 * time.Second)
 		if err != nil {
-			log.Printf("Error while consuming sync message: %s", err)
 			if err.Error() == "timeout" {
 				continue
 			}
+			log.Printf("Error while consuming sync message: %s (%T)", err, err)
 		}
 
 		// if the message is nil, continue. Most probably caused by "no messages in the subscription" timeout

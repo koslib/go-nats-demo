@@ -2,6 +2,18 @@
 
 
 [[projects]]
+  digest = "1:e20a9d6598878d629e04541d96076bf232c1ee36f6b267c4a5dae7779f15c36a"
+  name = "github.com/gogo/protobuf"
+  packages = [
+    "gogoproto",
+    "proto",
+    "protoc-gen-gogo/descriptor",
+  ]
+  pruneopts = "UT"
+  revision = "5628607bb4c51c3157aacc3a50f0ab707582b805"
+  version = "v1.3.1"
+
+[[projects]]
   digest = "1:9b8ee267e79a1730cde2e326cc53035913fce52ceef48142c24f3a15e3c65cb3"
   name = "github.com/nats-io/jwt"
   packages = ["."]
@@ -38,6 +50,17 @@
   version = "v1.0.1"
 
 [[projects]]
+  digest = "1:6bc50dacd6fe6486b20e23adb7224c4a2a4f32387f717505d2579202126d4e4e"
+  name = "github.com/nats-io/stan.go"
+  packages = [
+    ".",
+    "pb",
+  ]
+  pruneopts = "UT"
+  revision = "5506c5c7bb4296fddaeba70058254cde531476c5"
+  version = "v0.7.0"
+
+[[projects]]
   branch = "master"
   digest = "1:cd7e85fc3687e062714febdee3e8efeb00a413a2a620d28908fd0258261d2353"
   name = "golang.org/x/crypto"
@@ -51,6 +74,9 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  input-imports = ["github.com/nats-io/nats.go"]
+  input-imports = [
+    "github.com/nats-io/nats.go",
+    "github.com/nats-io/stan.go",
+  ]
   solver-name = "gps-cdcl"
   solver-version = 1

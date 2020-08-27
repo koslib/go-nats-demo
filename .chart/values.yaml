@@ -1,0 +1,35 @@
+replicaCount: 1
+
+image:
+  repository: localnatstest # change as needed
+  pullPolicy: IfNotPresent
+  tag: "latest"
+
+service:
+  type: ClusterIP
+  port: 8000
+
+ingress:
+  enabled: false
+
+resources:
+  limits:
+    cpu: 50m
+    memory: 100Mi
+  requests:
+    cpu: 15m
+    memory: 50Mi
+
+autoscaling:
+  enabled: false
+
+env:
+  NATS_SERVER_ADDR: example-nats-cluster.default.svc.cluster.local
+
+healthchecks:
+  enabled: false
+
+containerCommand:
+  enabled: false
+  command: []
+  args: []
