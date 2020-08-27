@@ -12,9 +12,9 @@ var nc *nats.Conn
 
 func main() {
 	natsServerAddr := getEnv("NATS_SERVER_ADDR", "127.0.0.1")
-	natsServerAddr2 := getEnv("NATS_SERVER_ADDR_2", "127.0.0.1")
 
-	natsClusterAddresses := []string{natsServerAddr, natsServerAddr2}
+	// Although I'm using a single connection str, leaving this here just in case, for future-proofing
+	natsClusterAddresses := []string{natsServerAddr}
 
 	var err error
 	nc, err = nats.Connect(strings.Join(natsClusterAddresses, ","), nats.Timeout(15*time.Second))
